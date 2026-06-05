@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绿野防线 - 生态塔防</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🌿</text></svg>">
+    <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+    <!-- 主菜单 -->
+    <div id="main-menu" class="screen active">
+        <div class="menu-bg"></div>
+        <div class="menu-content">
+            <h1 class="game-title">🌿 绿野防线 🌿</h1>
+            <p class="game-subtitle">守护大地 · 净化污秽 · 重塑生机</p>
+            <div class="menu-buttons">
+                <button id="btn-start" class="menu-btn primary">▶ 开始游戏</button>
+                <button id="btn-gacha" class="menu-btn">⭐ 抽取防御塔</button>
+                <button id="btn-howto" class="menu-btn">? 游戏指南</button>
+                <button id="btn-encyclopedia" class="menu-btn">📚 生态图鉴</button>
+            </div>
+            <div id="crystal-display" style="margin-top:16px;font-size:1rem;color:#ce93d8;">💎 生态结晶: <span id="crystal-count">0</span></div>
+        </div>
+        <div class="footer-text">每一座塔都是对地球的守护</div>
+    </div>
+
+    <!-- 游戏指南 -->
+    <div id="howto-screen" class="screen">
+        <div class="panel">
+            <h2>🌍 游戏指南</h2>
+            <div class="howto-content">
+                <section>
+                    <h3>🎯 游戏目标</h3>
+                    <p>阻止污染军团抵达核心「生命之树」！在路径旁建造防御塔，击退一波波敌人。</p>
+                </section>
+                <section>
+                    <h3>🏗️ 建造防御塔</h3>
+                    <p>点击绿色可建造区域 → 选择塔类型 → 放置。不同塔有不同特性：</p>
+                    <ul>
+                        <li><b>植物系</b> - 减速、控制、物理伤害</li>
+                        <li><b>能源系</b> - 范围攻击、元素伤害</li>
+                        <li><b>动物系</b> - 快速攻击、特殊功能</li>
+                        <li><b>工业系</b> - 高伤害、持续AOE（需解锁）</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>🌱 环境连锁系统</h3>
+                    <p><b>枯萎地块</b>（深色）无法建造。在其旁边建「净化塔」可逐渐净化土地。</p>
+                    <p>净化后的土地会随机长出增益植物！但被破坏的塔会再次污染周围地块。</p>
+                </section>
+                <section>
+                    <h3>💰 资源循环</h4>
+                    <p><span class="resource-icon chlorophyll">🍃</span> 叶绿素：基础资源，击败怪物获得</p>
+                    <p><span class="resource-icon dewdrop">💧</span> 纯净露珠：高级资源，净化土地获得</p>
+                    <p>出售塔可回收部分资源，升级分支可选「生态强化」或「高效净化」。</p>
+                </section>
+                <section>
+                    <h3>⭐ 三星评价</h3>
+                    <p>每关根据：<b>生存生命值</b>、<b>地图绿化度</b>、<b>资源回收率</b> 评定星级。</p>
+                </section>
+            </div>
+            <button class="menu-btn back-btn">返回主菜单</button>
+        </div>
+    </div>
+
+    <!-- 生态图鉴 -->
+    <div id="encyclopedia-screen" class="screen">
+        <div class="panel encyclopedia-panel">
+            <h2>📚 生态图鉴</h2>
+            <div class="tabs">
+                <button class="tab active" data-tab="towers">防御塔</button>
+                <button class="tab" data-tab="enemies">污染军团</button>
+            </div>
+            <div id="tab-towers" class="tab-content active"></div>
+            <div id="tab-enemies" class="tab-content"></div>
+            <button class="menu-btn back-btn">返回主菜单</button>
+        </div>
+    </div>
+
+    <!-- 选关界面 -->
+    <div id="level-select" class="screen">
+        <div class="panel">
+            <h2>🗺️ 选择关卡</h2>
+            <div id="level-grid" class="level-grid"></div>
+            <button class="menu-btn back-btn">返回</button>
+        </div>
+    </div>
+
+    <!-- 游戏主界面 -->
+    <div id="game-screen" class="screen">
+        <!-- 顶部信息栏 -->
+        <div id="top-bar">
+            <div class="resource-group">
+                <span class="res-item"><span class="res-icon">❤️</span><span class="res-val" id="hp-display">20</span></span>
+                <span class="res-item"><span class="res-icon">🍃</span><span class="res-val" id="chlorophyll-display">100</span></span>
+                <span class="res-item"><span class="res-icon">💧</span><span class="res-val" id="dewdrop-display">20</span></span>
+                <span class="res-item"><span class="res-label">波次</span><span class="res-val" id="wave-display">0/5</span></span>
+            </div>
+            <div class="control-group">
+                <button id="btn-pause" class="ctrl-btn">⏸</button>
+                <button id="btn-speed" class="ctrl-btn">1x</button>
+                <button id="btn-sound" class="ctrl-btn">🔊</button>
+                <button id="btn-menu" class="ctrl-btn">☰</button>
+            </div>
+        </div>
+
+        <!-- 游戏画布容器 -->
+        <div id="game-container">
+            <canvas id="game-canvas"></canvas>
+            <!-- 塔选择面板 -->
+            <div id="tower-panel" class="hidden">
+                <h4>选择防御塔</h4>
+                <div id="tower-list" class="tower-list"></div>
+            </div>
+            <!-- 塔信息面板 -->
+            <div id="tower-info" class="hidden">
+                <div class="info-header"><span id="info-tower-name"></span></div>
+                <div id="info-tower-stats" class="info-stats"></div>
+                <div id="info-tower-actions" class="info-actions"></div>
+            </div>
+        </div>
+
+        <!-- 底部波次控制 -->
+        <div id="bottom-bar">
+            <div class="ability-buttons" id="ability-buttons">
+                <button class="ability-btn" data-ability="purifyRain" title="净化雨: 全图枯萎+20% (20💧)">
+                    <span class="ab-icon">🌧</span><span class="ab-name">净化雨</span>
+                    <span class="ab-cd"></span>
+                </button>
+                <button class="ability-btn" data-ability="rootSurge" title="根脉涌动: 植物塔攻速翻倍2秒 (25💧)">
+                    <span class="ab-icon">🌿</span><span class="ab-name">根脉</span>
+                    <span class="ab-cd"></span>
+                </button>
+                <button class="ability-btn" data-ability="thornWall" title="荆棘屏障: 路径敌人-50HP+减速 (15💧)">
+                    <span class="ab-icon">🌵</span><span class="ab-name">荆棘</span>
+                    <span class="ab-cd"></span>
+                </button>
+                <button class="ability-btn" data-ability="energyBurst" title="能量爆发: 能源塔充能 (30💧)">
+                    <span class="ab-icon">💥</span><span class="ab-name">充能</span>
+                    <span class="ab-cd"></span>
+                </button>
+                <button class="ability-btn" data-ability="freezeAll" title="极寒领域: 冻结全图敌人 (35💧)">
+                    <span class="ab-icon">🧊</span><span class="ab-name">冻结</span>
+                    <span class="ab-cd"></span>
+                </button>
+            </div>
+            <button id="btn-start-wave" class="wave-btn">▶ 开始下一波次</button>
+            <div class="eco-meter">
+                <span>🌱 绿化度: </span>
+                <div class="progress-bar"><div id="green-progress" style="width:0%"></div></div>
+                <span id="green-percent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 暂停菜单 -->
+    <div id="pause-overlay" class="overlay hidden">
+        <div class="panel">
+            <h2>⏸️ 游戏暂停</h2>
+            <button id="btn-resume" class="menu-btn">继续游戏</button>
+            <button id="btn-restart" class="menu-btn">重新开始</button>
+            <button id="btn-quit-level" class="menu-btn">退出关卡</button>
+        </div>
+    </div>
+
+    <!-- 结算弹窗 -->
+    <div id="result-overlay" class="overlay hidden">
+        <div class="panel result-panel">
+            <h2 id="result-title">胜利!</h2>
+            <div id="result-stars" class="stars">⭐⭐⭐</div>
+            <div id="result-stats" class="result-stats"></div>
+            <div id="carbon-offset" class="carbon-info"></div>
+            <div class="result-actions">
+                <button id="btn-next-level" class="menu-btn primary">下一关</button>
+                <button id="btn-retry" class="menu-btn">重试</button>
+                <button id="btn-back-menu" class="menu-btn">返回主菜单</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 观察笔记弹窗 -->
+    <div id="note-popup" class="overlay hidden">
+        <div class="panel note-panel">
+            <div class="note-header">📝 观察笔记</div>
+            <h3 id="note-title"></h3>
+            <p id="note-content"></p>
+            <button class="menu-btn note-close">记录下来</button>
+        </div>
+    </div>
+
+    <!-- 新手引导提示 -->
+    <div id="tutorial-tip" class="tutorial-tip hidden">
+        <span id="tutorial-text"></span>
+        <button id="tutorial-close" class="tutorial-close-btn">✕</button>
+        <div class="tutorial-arrow"></div>
+    </div>
+
+    <!-- 主界面抽卡弹窗 -->
+    <div id="gacha-main-overlay" class="overlay hidden">
+        <div class="panel" style="max-width:580px;text-align:center;">
+            <h2>⭐ 防御塔抽取</h2>
+            <p style="color:#ce93d8;margin-bottom:16px;">💎 生态结晶: <span id="gacha-crystals">0</span></p>
+            <div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px;">
+                <button id="gacha-draw-1" class="menu-btn" style="flex:1;padding:16px;">
+                    🎲 单抽<br><small style="color:#a5d6a7;">30 💎</small>
+                </button>
+                <button id="gacha-draw-10" class="menu-btn primary" style="flex:1;padding:16px;">
+                    🎉 十连<br><small style="color:#a5d6a7;">250 💎 (保底稀有)</small>
+                </button>
+            </div>
+            <div id="gacha-result" style="min-height:60px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div id="gacha-collection" style="font-size:0.8rem;color:#81c784;text-align:left;"></div>
+                <button id="gacha-back" class="ctrl-btn">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 难度选择弹窗 -->
+    <div id="difficulty-overlay" class="overlay hidden">
+        <div class="panel" style="max-width:420px;text-align:center;">
+            <h2>🎯 选择难度</h2>
+            <p style="color:#a5d6a7;margin-bottom:20px;">难度影响敌人强度和初始资源</p>
+            <div id="difficulty-options" style="display:flex;flex-direction:column;gap:10px;">
+                <button class="menu-btn diff-btn" data-diff="easy" style="border-color:#4caf50;">🌱 简单<br><small style="color:#81c784;">敌人×0.7 | 初始资源×1.5</small></button>
+                <button class="menu-btn diff-btn" data-diff="normal" style="border-color:#7cfc00;background:rgba(124,252,0,0.15);">⚖️ 普通<br><small style="color:#81c784;">标准难度</small></button>
+                <button class="menu-btn diff-btn" data-diff="hard" style="border-color:#ff9800;">🔥 困难<br><small style="color:#ffab40;">敌人×1.5 | 初始资源×0.8</small></button>
+                <button class="menu-btn diff-btn" data-diff="hell" style="border-color:#f44336;">💀 地狱<br><small style="color:#ef9a9a;">敌人×2.5 | 初始资源×0.5</small></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 塔抽取弹窗 -->
+    <div id="gacha-overlay" class="overlay hidden">
+        <div class="panel gacha-panel">
+            <h2>⭐ 免费抽取防御塔</h2>
+            <p style="color:#a5d6a7;margin-bottom:16px;text-align:center;">从随机3座塔中选择1座免费建造！</p>
+            <div id="gacha-options" class="gacha-options"></div>
+            <div style="text-align:center;margin-top:16px;">
+                <span id="gacha-info" style="color:#81c784;font-size:0.9rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 剧情故事弹窗 -->
+    <div id="story-overlay" class="overlay hidden">
+        <div class="story-bg"></div>
+        <div id="story-container" class="story-container">
+            <div class="story-title" id="story-title"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js?v=5"></script>
+    <script src="js/utils.js?v=5"></script>
+    <script src="js/audio.js?v=5"></script>
+    <script src="js/voice.js?v=5"></script>
+    <script src="js/story.js?v=5"></script>
+    <script src="js/map.js?v=7"></script>
+    <script src="js/models.js?v=1"></script>
+    <script src="js/tower.js?v=7"></script>
+    <script src="js/enemy.js?v=7"></script>
+    <script src="js/projectile.js?v=5"></script>
+    <script src="js/particle.js?v=5"></script>
+    <script src="js/gacha.js?v=8"></script>
+    <script src="js/wave.js?v=7"></script>
+    <script src="js/ui.js?v=6"></script>
+    <script src="js/game.js?v=7"></script>
+    <script src="js/main.js?v=6"></script>
+</body>
+</html>
