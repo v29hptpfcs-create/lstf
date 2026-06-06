@@ -3,7 +3,7 @@
 const MODELS = {
     // ====== 防御塔 ======
     towers: {
-        fern_cannon: `<svg width="140" height="140" viewBox="0 0 140 140">
+        fern_cannon: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="118" rx="30" ry="8" fill="#5d4037" opacity="0.7"/>
             <rect x="52" y="95" width="36" height="26" rx="6" fill="#6d4c41"/>
             <rect x="56" y="98" width="28" height="20" rx="4" fill="#795548"/>
@@ -25,7 +25,7 @@ const MODELS = {
             <circle cx="70" cy="68" r="2" fill="#e3f2fd"/>
         </svg>`,
 
-        lily_platform: `<svg width="140" height="140" viewBox="0 0 140 140">
+        lily_platform: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="115" rx="40" ry="9" fill="#0d47a1" opacity="0.5"/>
             <ellipse cx="70" cy="115" rx="30" ry="6" fill="#1565c0" opacity="0.6"/>
             <path d="M70,110 L40,98 Q35,85 50,80 Q63,76 70,90 Q77,76 90,80 Q105,85 100,98 Z" fill="#2e7d32"/>
@@ -41,7 +41,7 @@ const MODELS = {
             <circle cx="70" cy="72" r="3" fill="#fff176"/>
         </svg>`,
 
-        willow_sentry: `<svg width="140" height="140" viewBox="0 0 140 140">
+        willow_sentry: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <rect x="63" y="60" width="14" height="60" rx="5" fill="#5d4037"/>
             <rect x="65" y="62" width="10" height="56" rx="4" fill="#795548"/>
             <path d="M70,80 Q55,90 50,115" stroke="#81c784" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -58,7 +58,7 @@ const MODELS = {
             <rect x="65" y="18" width="10" height="8" rx="4" fill="#78909c"/>
         </svg>`,
 
-        algae_purifier: `<svg width="140" height="140" viewBox="0 0 140 140">
+        algae_purifier: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="122" rx="22" ry="6" fill="#455a64"/>
             <rect x="60" y="110" width="20" height="14" rx="3" fill="#546e7a"/>
             <circle cx="70" cy="75" r="38" fill="none" stroke="#80cbc4" stroke-width="2" opacity="0.6"/>
@@ -74,7 +74,7 @@ const MODELS = {
             <circle cx="70" cy="33" r="5" fill="#455a64"/>
         </svg>`,
 
-        wind_vortex: `<svg width="140" height="140" viewBox="0 0 140 140">
+        wind_vortex: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="122" rx="28" ry="7" fill="#37474f"/>
             <rect x="57" y="105" width="26" height="20" rx="5" fill="#455a64"/>
             <circle cx="70" cy="75" r="42" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.3"/>
@@ -91,7 +91,7 @@ const MODELS = {
             <circle cx="70" cy="75" r="5" fill="#cfd8dc"/>
         </svg>`,
 
-        solar_matrix: `<svg width="140" height="140" viewBox="0 0 140 140">
+        solar_matrix: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <line x1="70" y1="110" x2="40" y2="125" stroke="#546e7a" stroke-width="3"/>
             <line x1="70" y1="110" x2="100" y2="125" stroke="#546e7a" stroke-width="3"/>
             <line x1="70" y1="110" x2="70" y2="125" stroke="#546e7a" stroke-width="4"/>
@@ -110,7 +110,7 @@ const MODELS = {
             <rect x="98" y="46" width="10" height="14" rx="2" fill="#1e88e5" opacity="0.5"/>
         </svg>`,
 
-        geothermal_fissure: `<svg width="140" height="140" viewBox="0 0 140 140">
+        geothermal_fissure: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="120" rx="38" ry="10" fill="#212121"/>
             <path d="M32,120 Q35,90 50,80 Q60,74 70,80 Q80,74 90,80 Q105,90 108,120 Z" fill="#1a1a1a"/>
             <path d="M36,120 Q38,95 50,86 Q60,80 70,86 Q80,80 90,86 Q102,95 104,120 Z" fill="#263238"/>
@@ -121,7 +121,7 @@ const MODELS = {
             <circle cx="70" cy="28" r="4" fill="#ef5350"/>
         </svg>`,
 
-        gravity_trap: `<svg width="140" height="140" viewBox="0 0 140 140">
+        gravity_trap: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <circle cx="70" cy="70" r="55" fill="none" stroke="#7c4dff" stroke-width="1" opacity="0.3"/>
             <circle cx="70" cy="70" r="44" fill="none" stroke="#651fff" stroke-width="1.5" opacity="0.5"/>
             <line x1="70" y1="70" x2="70" y2="30" stroke="#b39ddb" stroke-width="1" stroke-dasharray="3 3"/>
@@ -143,7 +143,7 @@ const MODELS = {
             <circle cx="70" cy="70" r="5" fill="white" opacity="0.8"/>
         </svg>`,
 
-        frost_emitter: `<svg width="140" height="140" viewBox="0 0 140 140">
+        frost_emitter: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <polygon points="70,110 95,97 95,71 70,58 45,71 45,97" fill="#0d47a1" stroke="#80deea" stroke-width="2"/>
             <polygon points="70,106 91,95 91,73 70,62 49,73 49,95" fill="#1565c0"/>
             <line x1="70" y1="62" x2="70" y2="110" stroke="#80deea" stroke-width="0.8" opacity="0.5"/>
@@ -159,7 +159,7 @@ const MODELS = {
             <line x1="70" y1="40" x2="70" y2="16" stroke="white" stroke-width="2" opacity="0.5"/>
         </svg>`,
 
-        bee_thrower: `<svg width="140" height="140" viewBox="0 0 140 140">
+        bee_thrower: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <polygon points="70,120 100,103 100,69 70,52 40,69 40,103" fill="#f57f17" stroke="#f9a825" stroke-width="2"/>
             <polygon points="70,108 84,100 84,84 70,76 56,84 56,100" fill="#e65100" stroke="#ff8f00" stroke-width="1"/>
             <polygon points="70,76 79,71 79,61 70,56 61,61 61,71" fill="#e65100" stroke="#ff8f00" stroke-width="1"/>
@@ -178,7 +178,7 @@ const MODELS = {
             <ellipse cx="80" cy="42" rx="4" ry="2.5" fill="white" opacity="0.7"/>
         </svg>`,
 
-        swift_return: `<svg width="140" height="140" viewBox="0 0 140 140">
+        swift_return: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="100" rx="38" ry="16" fill="#4e342e"/>
             <path d="M32,100 Q35,86 50,82 Q60,80 70,84 Q80,80 90,82 Q105,86 108,100 Q90,115 70,116 Q50,115 32,100 Z" fill="#5d4037"/>
             <path d="M40,95 Q55,88 70,90 Q85,88 100,95" stroke="#3e2723" stroke-width="2" fill="none"/>
@@ -196,7 +196,7 @@ const MODELS = {
             <path d="M80,57 L84,56" stroke="#ffb74d" stroke-width="1.5" fill="none"/>
         </svg>`,
 
-        glow_mushroom: `<svg width="140" height="140" viewBox="0 0 140 140">
+        glow_mushroom: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <rect x="62" y="85" width="16" height="36" rx="7" fill="#d7ccc8"/>
             <rect x="64" y="87" width="12" height="32" rx="6" fill="#efebe9"/>
             <ellipse cx="70" cy="92" rx="28" ry="10" fill="#7b1fa2"/>
@@ -212,7 +212,7 @@ const MODELS = {
             <circle cx="85" cy="52" r="2.5" fill="#e040fb" opacity="0.9"/>
         </svg>`,
 
-        electric_eel: `<svg width="140" height="140" viewBox="0 0 140 140">
+        electric_eel: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="118" rx="38" ry="10" fill="#01579b" opacity="0.7"/>
             <ellipse cx="70" cy="114" rx="34" ry="7" fill="#0277bd" opacity="0.8"/>
             <path d="M40,110 Q50,95 60,90 Q70,85 75,75 Q80,65 90,60 Q100,55 105,45" stroke="#80cbc4" stroke-width="10" fill="none" stroke-linecap="round"/>
@@ -225,7 +225,7 @@ const MODELS = {
             <path d="M55,88 L60,76 L56,74 L62,62" stroke="#ffee58" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
         </svg>`,
 
-        plastic_melter: `<svg width="140" height="140" viewBox="0 0 140 140">
+        plastic_melter: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="124" rx="30" ry="7" fill="#37474f"/>
             <rect x="44" y="55" width="52" height="70" rx="6" fill="#455a64"/>
             <rect x="46" y="57" width="48" height="66" rx="5" fill="#546e7a"/>
@@ -243,7 +243,7 @@ const MODELS = {
             <line x1="76" y1="100" x2="78" y2="97" stroke="#ff5722" stroke-width="1.5"/>
         </svg>`,
 
-        compost_fermentor: `<svg width="140" height="140" viewBox="0 0 140 140">
+        compost_fermentor: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="122" rx="26" ry="6" fill="#33691e"/>
             <ellipse cx="70" cy="70" rx="36" ry="50" fill="#558b2f"/>
             <ellipse cx="70" cy="70" rx="34" ry="48" fill="#689f38"/>
@@ -267,7 +267,7 @@ const MODELS = {
     },
 
     enemies: {
-        fog_cloud: `<svg width="140" height="140" viewBox="0 0 140 140">
+        fog_cloud: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <path d="M30,90 Q30,72 42,68 Q44,56 56,55 Q58,44 70,44 Q82,44 84,55 Q96,56 98,68 Q110,72 110,90 Q110,105 70,108 Q30,105 30,90 Z" fill="#bdbdbd" opacity="0.85"/>
             <circle cx="48" cy="66" r="14" fill="#e0e0e0" opacity="0.8"/>
             <circle cx="70" cy="52" r="18" fill="#eeeeee" opacity="0.8"/>
@@ -282,7 +282,7 @@ const MODELS = {
             <circle cx="85" cy="77" r="2" fill="#616161"/>
         </svg>`,
 
-        oil_crawler: `<svg width="140" height="140" viewBox="0 0 140 140">
+        oil_crawler: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="70" cy="118" rx="35" ry="6" fill="#1a0a00" opacity="0.6"/>
             <path d="M70,30 Q95,45 98,75 Q100,100 70,108 Q40,100 42,75 Q45,45 70,30 Z" fill="#3e2723"/>
             <ellipse cx="58" cy="55" rx="12" ry="18" fill="#4e342e" opacity="0.5" transform="rotate(-15,58,55)"/>
@@ -298,7 +298,7 @@ const MODELS = {
             <circle cx="80" cy="66" r="1.5" fill="white"/>
         </svg>`,
 
-        plastic_beast: `<svg width="140" height="140" viewBox="0 0 140 140">
+        plastic_beast: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <path d="M40,50 L50,40 L55,50 L60,38 L65,50 L70,36 L75,50 L80,38 L85,50 L90,40 L100,50 L100,95 L90,105 L80,100 L70,108 L60,100 L50,105 L40,95 Z" fill="#1565c0"/>
             <path d="M43,52 L52,43 L56,52 L62,42 L66,52 L70,40 L74,52 L80,42 L84,52 L88,43 L97,52 L97,93 L88,103 L78,98 L70,106 L62,98 L52,103 L43,93 Z" fill="#1976d2"/>
             <line x1="70" y1="40" x2="70" y2="108" stroke="white" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
@@ -316,14 +316,14 @@ const MODELS = {
             <rect x="81" y="86" width="5" height="5" fill="white"/>
         </svg>`,
 
-        plastic_shard: `<svg width="140" height="140" viewBox="0 0 140 140">
+        plastic_shard: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <path d="M70,35 L85,50 L95,42 L92,60 L105,68 L90,75 L95,90 L78,85 L75,100 L60,90 L45,98 L48,80 L35,73 L50,65 L44,48 L60,55 Z" fill="#1565c0"/>
             <path d="M70,38 L83,52 L92,45 L89,62 L101,69 L88,76 L92,88 L77,83 L73,97 L59,88 L46,95 L49,78 L38,72 L52,65 L47,50 L62,57 Z" fill="#1976d2"/>
             <path d="M70,38 L83,52 Z" stroke="white" stroke-width="3" opacity="0.7"/>
             <path d="M88,60 L101,69 Z" stroke="white" stroke-width="2.5" opacity="0.5"/>
         </svg>`,
 
-        poacher_mech: `<svg width="140" height="140" viewBox="0 0 140 140">
+        poacher_mech: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <rect x="22" y="100" width="40" height="16" rx="7" fill="#424242"/>
             <rect x="78" y="100" width="40" height="16" rx="7" fill="#424242"/>
             <circle cx="30" cy="108" r="7" fill="#212121"/>
@@ -350,7 +350,7 @@ const MODELS = {
             <rect x="90" y="60" width="6" height="10" rx="2" fill="#37474f"/>
         </svg>`,
 
-        acid_rain_cloud: `<svg width="140" height="140" viewBox="0 0 140 140">
+        acid_rain_cloud: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <path d="M22,85 Q20,65 35,60 Q38,48 52,46 Q56,36 70,36 Q84,36 88,46 Q102,48 105,60 Q120,65 118,85 Q115,100 70,100 Q25,100 22,85 Z" fill="#37474f"/>
             <circle cx="45" cy="63" r="18" fill="#455a64"/>
             <circle cx="70" cy="48" r="22" fill="#546e7a"/>
@@ -360,7 +360,7 @@ const MODELS = {
             <path d="M55,85 L62,70 L58,70 L65,55" stroke="#c6ff00" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
         </svg>`,
 
-        defiler_troll: `<svg width="140" height="140" viewBox="0 0 140 140">
+        defiler_troll: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <rect x="50" y="100" width="14" height="28" rx="6" fill="#2e7d32"/>
             <rect x="76" y="100" width="14" height="28" rx="6" fill="#2e7d32"/>
             <rect x="38" y="55" width="64" height="52" rx="10" fill="#1b5e20"/>
@@ -384,7 +384,7 @@ const MODELS = {
             <path d="M8,68 L20,72 L20,58 Z" fill="#90a4ae"/>
         </svg>`,
 
-        nuclear_worm: `<svg width="140" height="140" viewBox="0 0 140 140">
+        nuclear_worm: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="106" cy="98" rx="13" ry="11" fill="#4a148c"/>
             <ellipse cx="106" cy="98" rx="11" ry="9" fill="#6a1b9a"/>
             <path d="M100,95 L108,90 M104,104 L110,96" stroke="#e040fb" stroke-width="1.2" opacity="0.7"/>
@@ -405,7 +405,7 @@ const MODELS = {
             <circle cx="43" cy="70" r="2.2" fill="white"/>
         </svg>`,
 
-        e_waste_golem: `<svg width="140" height="140" viewBox="0 0 140 140">
+        e_waste_golem: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <rect x="42" y="108" width="22" height="22" rx="3" fill="#263238"/>
             <rect x="76" y="108" width="22" height="22" rx="3" fill="#263238"/>
             <rect x="32" y="62" width="76" height="50" rx="5" fill="#263238"/>
@@ -428,7 +428,7 @@ const MODELS = {
             <circle cx="89" cy="16" r="3" fill="#29b6f6"/>
         </svg>`,
 
-        smog_serpent: `<svg width="140" height="140" viewBox="0 0 140 140">
+        smog_serpent: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <ellipse cx="102" cy="105" rx="14" ry="10" fill="#78909c" opacity="0.75"/>
             <ellipse cx="102" cy="105" rx="12" ry="8" fill="#90a4ae" opacity="0.8"/>
             <ellipse cx="70" cy="80" rx="18" ry="12" fill="#78909c" opacity="0.8"/>
@@ -445,7 +445,7 @@ const MODELS = {
             <path d="M10,62 L4,58 M10,62 L4,66" stroke="#a5d6a7" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>`,
 
-        microbe_swarm: `<svg width="140" height="140" viewBox="0 0 140 140">
+        microbe_swarm: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <circle cx="70" cy="70" r="42" fill="none" stroke="#f48fb1" stroke-width="2" opacity="0.4"/>
             <circle cx="70" cy="70" r="36" fill="#f8bbd0" opacity="0.12"/>
             <circle cx="70" cy="42" r="10" fill="#e91e63"/>
@@ -462,7 +462,7 @@ const MODELS = {
             <circle cx="70" cy="70" r="4" fill="#f48fb1" opacity="0.7"/>
         </svg>`,
 
-        microbe_mite: `<svg width="140" height="140" viewBox="0 0 140 140">
+        microbe_mite: `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140">
             <circle cx="70" cy="70" r="28" fill="#e91e63"/>
             <circle cx="70" cy="70" r="24" fill="#f06292"/>
             <ellipse cx="62" cy="62" rx="8" ry="6" fill="#f48fb1" opacity="0.6"/>

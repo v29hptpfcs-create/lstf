@@ -492,12 +492,16 @@ class Game {
         ctx.fillStyle = canPlace ? 'rgba(76,175,80,0.35)' : 'rgba(244,67,54,0.35)';
         ctx.fillRect(x + 2, y + 2, ts - 4, ts - 4);
         
-        // 塔图标预览
-        ctx.globalAlpha = canPlace ? 0.7 : 0.35;
-        ctx.font = `${ts - 12}px serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(def.icon, x + ts/2, y + ts/2);
+        // 塔图标预览 - 使用实际塔的SVG精灵替代emoji
+        ctx.globalAlpha = canPlace ? 0.5 : 0.25;
+        if (typeof SpriteManager !== 'undefined' && SpriteManager.get(def.id, 'towers')) {
+            SpriteManager.draw(ctx, def.id, 'towers', x + ts/2, y + ts/2, ts * 0.85);
+        } else {
+            ctx.font = `${ts - 12}px serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(def.icon, x + ts/2, y + ts/2);
+        }
         
         ctx.globalAlpha = 1;
     }

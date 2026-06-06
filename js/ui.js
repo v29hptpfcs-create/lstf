@@ -435,6 +435,62 @@ const MiniTowerIcon = {
                 ctx.fillStyle = '#795548'; ctx.beginPath(); ctx.roundRect(cx - r * 0.35, cy - r * 0.3, r * 0.7, r * 0.7, r * 0.1); ctx.fill();
                 ctx.fillStyle = cc[0]; ctx.beginPath(); ctx.arc(cx, cy, r * 0.12, 0, Math.PI*2); ctx.fill();
                 break;
+            case 'algae_purifier':
+                ctx.fillStyle = hexToRgba('#a5d6a7', 0.3); ctx.beginPath(); ctx.arc(cx, cy, r * 0.5, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = hexToRgba('#a5d6a7', 0.5); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx, cy, r * 0.5, 0, Math.PI*2); ctx.stroke();
+                for (let i = 0; i < 3; i++) {
+                    const ax = cx + Math.cos(i * 2.1) * r * 0.2;
+                    const ay = cy + Math.sin(i * 1.7) * r * 0.15;
+                    ctx.fillStyle = hexToRgba('#4caf50', 0.7);
+                    ctx.beginPath(); ctx.arc(ax, ay, r * 0.1, 0, Math.PI*2); ctx.fill();
+                }
+                ctx.fillStyle = '#43a047'; ctx.beginPath(); ctx.ellipse(cx, cy - r * 0.3, r * 0.3, r * 0.08, 0, 0, Math.PI*2); ctx.fill();
+                break;
+            case 'electric_eel':
+                ctx.fillStyle = hexToRgba('#1565c0', 0.3); ctx.beginPath(); ctx.arc(cx, cy + r * 0.1, r * 0.45, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#1a237e'; ctx.lineWidth = r * 0.2; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(cx - r * 0.2, cy + r * 0.1);
+                ctx.quadraticCurveTo(cx - r * 0.3, cy - r * 0.15, cx, cy - r * 0.2);
+                ctx.quadraticCurveTo(cx + r * 0.3, cy - r * 0.25, cx + r * 0.2, cy - r * 0.35); ctx.stroke();
+                ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(cx - r * 0.15, cy + r * 0.05);
+                ctx.lineTo(cx - r * 0.06, cy - r * 0.1); ctx.lineTo(cx + r * 0.04, cy - r * 0.05);
+                ctx.lineTo(cx + r * 0.1, cy - r * 0.2); ctx.stroke();
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx - r * 0.1, cy - r * 0.25, r * 0.06, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#1a237e'; ctx.beginPath(); ctx.arc(cx - r * 0.1, cy - r * 0.25, r * 0.03, 0, Math.PI*2); ctx.fill();
+                break;
+            case 'gravity_trap':
+                ctx.strokeStyle = hexToRgba('#7c4dff', 0.6); ctx.lineWidth = 1.5;
+                for (let i = 0; i < 2; i++) {
+                    ctx.beginPath(); ctx.arc(cx, cy, r * (0.35 + i * 0.18), 0, Math.PI*2); ctx.stroke();
+                }
+                ctx.strokeStyle = hexToRgba('#7c4dff', 0.2);
+                for (let i = 0; i < 4; i++) {
+                    const a = i * Math.PI / 2;
+                    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * r * 0.7, cy + Math.sin(a) * r * 0.5); ctx.stroke();
+                }
+                ctx.fillStyle = '#7c4dff'; ctx.beginPath(); ctx.arc(cx, cy, r * 0.18, 0, Math.PI*2); ctx.fill();
+                break;
+            case 'frost_emitter':
+                ctx.fillStyle = '#e3f2fd';
+                ctx.beginPath();
+                ctx.moveTo(cx, cy + r * 0.35);
+                ctx.lineTo(cx - r * 0.35, cy + r * 0.05);
+                ctx.lineTo(cx - r * 0.2, cy - r * 0.2);
+                ctx.lineTo(cx, cy - r * 0.05);
+                ctx.lineTo(cx + r * 0.2, cy - r * 0.2);
+                ctx.lineTo(cx + r * 0.35, cy + r * 0.05);
+                ctx.closePath(); ctx.fill();
+                ctx.fillStyle = '#81d4fa'; ctx.beginPath(); ctx.arc(cx, cy, r * 0.18, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#80deea';
+                ctx.beginPath(); ctx.moveTo(cx, cy - r * 0.45);
+                ctx.lineTo(cx - r * 0.1, cy - r * 0.15);
+                ctx.lineTo(cx + r * 0.1, cy - r * 0.15);
+                ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = '#80deea'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(cx, cy - r * 0.35);
+                ctx.lineTo(cx, cy - r * 0.55); ctx.stroke();
+                break;
             default:
                 ctx.fillStyle = cc[0]; ctx.beginPath(); ctx.arc(cx, cy, r * 0.45, 0, Math.PI*2); ctx.fill();
                 ctx.fillStyle = cc[2]; ctx.beginPath(); ctx.arc(cx, cy, r * 0.2, 0, Math.PI*2); ctx.fill();
