@@ -57,6 +57,10 @@ class Game {
         // 观察笔记记录
         this.unlockedNotes = new Set();
         
+        // 本局已遇敌追踪（用于首次出现弹出生物图鉴）
+        this._seenEnemyTypes = new Set();
+        this._bestiaryTimer = null;
+        
         // 技能系统
         this.abilities = {
             purifyRain: { name: '净化雨', cost: 20, cooldown: 15000, lastUsed: 0, icon: '🌧', desc: '全图枯萎地块净化进度+20%' },
@@ -213,6 +217,11 @@ class Game {
             const spawnedEnemy = this.waveManager.update(now, this);
             if (spawnedEnemy) {
                 this.enemies.push(spawnedEnemy);
+                // 首次遇到该类型敌人时弹出生物图鉴卡片
+                if (!this._seenEnemyTypes.has(spawnedEnemy.id)) {
+                    this._seenEnemyTypes.add(spawnedEnemy.id);
+                    this.showBestiaryPopup(spawnedEnemy.def);
+                }
             }
             
             // 波次完成奖励（每次波次状态从运行变完成时触发）
@@ -720,20 +729,22 @@ class Game {
         this.waveManager.startWave(nextIndex);
         this.ui.update();
         if (typeof SFX !== 'undefined') SFX.waveStart();
-        
-        // 每2波触发一次免费抽塔
-        if (typeof TOWER_GACHA !== 'undefined' && TOWER_GACHA.canDraw()) {
-            const result = TOWER_GACHA.draw();
-            if (result) {
-                setTimeout(() => { this.showGacha(result); }, 500);
-            }
-        }
     }
     
     togglePause() {
         this.paused = !this.paused;
-        document.getElementById('pause-overlay').classList.toggle('hidden', !this.paused);
+        const overlay = document.getElementById('pause-overlay');
+        overlay.classList.toggle('hidden', !this.paused);
         document.getElementById('btn-pause').textContent = this.paused ? '▶️' : '⏸️';
+        
+        // 暂停时更新面板中的游戏状态
+        if (this.paused) {
+            document.getElementById('pause-hp').textContent = this.hp;
+            document.getElementById('pause-chlorophyll').textContent = this.chlorophyll;
+            document.getElementById('pause-dewdrop').textContent = this.dewdrop;
+            const wm = this.waveManager;
+            document.getElementById('pause-wave').textContent = wm ? `${wm.currentWave}/${wm.totalWaves}` : '0/0';
+        }
     }
     
     toggleSpeed() {
@@ -778,14 +789,98 @@ class Game {
         }, 600);
     }
     
+    // ====== 生物图鉴弹出卡片（右上角自动消失） ======
+    showBestiaryPopup(def) {
+        if (!this.enemies) return;
+        if (!def || !def.name) return;
+        
+        const contentEl = document.getElementById('bestiary-popup-content');
+        const popupEl = document.getElementById('bestiary-popup');
+        if (!contentEl || !popupEl) return;
+        
+        // 构建标签
+        let tags = [];
+        if (def.isBoss) tags.push('<span class="beast-tag boss-tag">Boss</span>');
+        if (def.isFlying) tags.push('<span class="beast-tag flying-tag">飞行</span>');
+        if (def.type) tags.push(`<span class="beast-tag">${def.type}</span>`);
+        
+        const statsText = `HP:${def.hp} | 速度:${def.speed}` +
+            (def.reward ? ` | 🍃${def.reward.chlorophyll||0} 💧${def.reward.dewdrop||0}` : '');
+        
+        contentEl.innerHTML = `
+            <div class="beast-icon">${def.icon}</div>
+            <div class="beast-info">
+                <div class="beast-name">${def.name} ${tags.join(' ')}</div>
+                <div class="beast-desc">${def.desc || ''}</div>
+                <div class="beast-stats">${statsText}</div>
+            </div>
+        `;
+        
+        // 清除旧动画
+        popupEl.style.animation = 'none';
+        // 重新触发动画
+        void popupEl.offsetHeight;
+        popupEl.style.animation = '';
+        popupEl.classList.remove('hidden');
+        
+        // 重置自动关闭定时器
+        if (this._bestiaryTimer) {
+            clearTimeout(this._bestiaryTimer);
+            this._bestiaryTimer = null;
+        }
+        this._bestiaryTimer = setTimeout(() => {
+            const el = document.getElementById('bestiary-popup');
+            if (el && !el.classList.contains('hidden')) {
+                el.style.animation = 'bestiarySlideOut 0.3s ease-in forwards';
+                setTimeout(() => {
+                    el.classList.add('hidden');
+                    el.style.animation = '';
+                }, 300);
+            }
+        }, 3500);
+    }
+    
     showNote(data) {
         if (!this.enemies) return; // 游戏实例已销毁
         if (!data || !data.noteTitle) return;
         
-        const overlay = document.getElementById('note-popup');
-        document.getElementById('note-title').textContent = `📖 ${data.noteTitle}`;
-        document.getElementById('note-content').textContent = data.noteContent;
-        overlay.classList.remove('hidden');
+        const popupEl = document.getElementById('note-popup');
+        const titleEl = document.getElementById('note-title');
+        const contentEl = document.getElementById('note-content');
+        if (!popupEl || !titleEl || !contentEl) return;
+        
+        titleEl.textContent = data.noteTitle;
+        contentEl.textContent = data.noteContent;
+        
+        // 清除旧动画
+        const contentWrap = popupEl.querySelector('.note-card-content');
+        if (contentWrap) {
+            contentWrap.style.animation = 'none';
+            void contentWrap.offsetHeight;
+            contentWrap.style.animation = '';
+        }
+        popupEl.classList.remove('hidden');
+        
+        // 重置自动关闭定时器
+        if (this._noteTimer) {
+            clearTimeout(this._noteTimer);
+            this._noteTimer = null;
+        }
+        this._noteTimer = setTimeout(() => {
+            const el = document.getElementById('note-popup');
+            if (el && !el.classList.contains('hidden')) {
+                const cw = el.querySelector('.note-card-content');
+                if (cw) {
+                    cw.style.animation = 'bestiarySlideOut 0.3s ease-in forwards';
+                    setTimeout(() => {
+                        el.classList.add('hidden');
+                        if (cw) cw.style.animation = '';
+                    }, 300);
+                } else {
+                    el.classList.add('hidden');
+                }
+            }
+        }, 5000);
     }
 
     // ====== 输入初始化（实际事件绑定在 main.js 中） ======

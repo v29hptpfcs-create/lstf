@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>绿野防线 - 生态塔防</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🌿</text></svg>">
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
     <!-- 主菜单 -->
@@ -156,11 +156,24 @@
 
     <!-- 暂停菜单 -->
     <div id="pause-overlay" class="overlay hidden">
-        <div class="panel">
-            <h2>⏸️ 游戏暂停</h2>
-            <button id="btn-resume" class="menu-btn">继续游戏</button>
-            <button id="btn-restart" class="menu-btn">重新开始</button>
-            <button id="btn-quit-level" class="menu-btn">退出关卡</button>
+        <div class="pause-panel">
+            <div class="pause-header">
+                <div class="pause-icon">⏸️</div>
+                <div class="pause-title">游戏暂停</div>
+                <div class="pause-divider"></div>
+            </div>
+            <div class="pause-stats" id="pause-stats">
+                <div class="pause-stat"><span class="ps-icon">❤️</span><span class="ps-val" id="pause-hp">0</span></div>
+                <div class="pause-stat"><span class="ps-icon">🍃</span><span class="ps-val" id="pause-chlorophyll">0</span></div>
+                <div class="pause-stat"><span class="ps-icon">💧</span><span class="ps-val" id="pause-dewdrop">0</span></div>
+                <div class="pause-stat"><span class="ps-icon">🌊</span><span class="ps-val" id="pause-wave">0/0</span></div>
+            </div>
+            <div class="pause-buttons">
+                <button id="btn-resume" class="pause-btn resume-btn">▶ 继续游戏</button>
+                <button id="btn-restart" class="pause-btn restart-btn">🔄 重新开始</button>
+                <button id="btn-quit-level" class="pause-btn quit-btn">🚪 退出关卡</button>
+            </div>
+            <div class="pause-footer">按 <kbd>ESC</kbd> 或 <kbd>P</kbd> 继续</div>
         </div>
     </div>
 
@@ -179,14 +192,18 @@
         </div>
     </div>
 
-    <!-- 观察笔记弹窗 -->
-    <div id="note-popup" class="overlay hidden">
-        <div class="panel note-panel">
-            <div class="note-header">📝 观察笔记</div>
-            <h3 id="note-title"></h3>
-            <p id="note-content"></p>
-            <button class="menu-btn note-close">记录下来</button>
+    <!-- 观察笔记弹窗（右上角自动消失） -->
+    <div id="note-popup" class="note-card hidden">
+        <div id="note-popup-content" class="note-card-content">
+            <div class="note-card-header">📝 观察笔记</div>
+            <div class="note-card-title" id="note-title"></div>
+            <div class="note-card-body" id="note-content"></div>
         </div>
+    </div>
+
+    <!-- 生物图鉴弹出卡片（右上角自动消失） -->
+    <div id="bestiary-popup" class="bestiary-popup hidden">
+        <div id="bestiary-popup-content"></div>
     </div>
 
     <!-- 新手引导提示 -->
@@ -265,7 +282,7 @@
     <script src="js/gacha.js?v=8"></script>
     <script src="js/wave.js?v=7"></script>
     <script src="js/ui.js?v=6"></script>
-    <script src="js/game.js?v=7"></script>
-    <script src="js/main.js?v=6"></script>
+    <script src="js/game.js?v=10"></script>
+    <script src="js/main.js?v=7"></script>
 </body>
 </html>

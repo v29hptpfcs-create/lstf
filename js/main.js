@@ -402,11 +402,8 @@ function bindGameEvents() {
         generateLevelSelect();
     });
     
-    // 观察笔记关闭
-    document.querySelector('.note-close').addEventListener('click', () => {
-        document.getElementById('note-popup').classList.add('hidden');
-    });
-    
+    // 观察笔记现已自动消失，无需手动关闭
+
     // ====== Canvas输入事件 ======
     const canvas = document.getElementById('game-canvas');
     
