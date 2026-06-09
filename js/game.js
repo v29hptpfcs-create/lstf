@@ -476,43 +476,102 @@ class Game {
         if (grid.col < 0 || grid.row < 0) return;
         
         const ts = CONFIG.TILE_SIZE;
+        const cx = grid.col * ts + ts / 2 + this.offsetX;
+        const cy = grid.row * ts + ts / 2 + this.offsetY;
         const x = grid.col * ts + this.offsetX;
         const y = grid.row * ts + this.offsetY;
         const def = this.selectedTowerDef;
         
         const canPlace = this.canPlaceTower(grid.col, grid.row, def);
+        const baseColor = canPlace ? '76,175,80' : '244,67,54';
+        const glowColor = canPlace ? '124,252,0' : '255,82,82';
         
-        // 半透明预览
-        ctx.globalAlpha = canPlace ? 0.45 : 0.25;
+        // 脉冲缩放（缓慢呼吸动画）
+        const pulse = 0.92 + 0.08 * Math.sin(Date.now() / 600);
         
-        // 范围预览
-        ctx.fillStyle = canPlace ? 'rgba(76,175,80,0.12)' : 'rgba(244,67,54,0.12)';
+        ctx.save();
+        
+        // 外层光晕（最外圈柔光）
+        const glowGrad = ctx.createRadialGradient(cx, cy, def.range * 0.7, cx, cy, def.range * pulse * 1.6);
+        glowGrad.addColorStop(0, `rgba(${baseColor},0)`);
+        glowGrad.addColorStop(0.6, `rgba(${baseColor},0.05)`);
+        glowGrad.addColorStop(1, `rgba(${baseColor},0)`);
+        ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(x + ts/2, y + ts/2, def.range, 0, Math.PI * 2);
+        ctx.arc(cx, cy, def.range * pulse * 1.6, 0, Math.PI * 2);
         ctx.fill();
         
-        ctx.strokeStyle = canPlace ? 'rgba(76,175,80,0.5)' : 'rgba(244,67,54,0.5)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([5, 4]);
+        // 范围填充（半透明圆，带渐变）
+        ctx.globalAlpha = canPlace ? 0.55 : 0.4;
+        const fillGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, def.range * pulse);
+        fillGrad.addColorStop(0, `rgba(${baseColor},${canPlace ? 0.25 : 0.18})`);
+        fillGrad.addColorStop(0.7, `rgba(${baseColor},${canPlace ? 0.18 : 0.12})`);
+        fillGrad.addColorStop(1, `rgba(${baseColor},${canPlace ? 0.10 : 0.06})`);
+        ctx.fillStyle = fillGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, def.range * pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        
+        // 主范围圆圈（加粗发光）
+        ctx.strokeStyle = canPlace ? `rgba(${glowColor},0.7)` : `rgba(${glowColor},0.5)`;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = `rgba(${glowColor},${canPlace ? 0.5 : 0.3})`;
+        ctx.shadowBlur = 12;
+        ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        ctx.arc(cx, cy, def.range * pulse, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+        
+        // 内圈高光线（细实线）
+        ctx.strokeStyle = `rgba(${baseColor},0.25)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, def.range * pulse * 0.88, 0, Math.PI * 2);
+        ctx.stroke();
         
         // 格子高亮
-        ctx.fillStyle = canPlace ? 'rgba(76,175,80,0.35)' : 'rgba(244,67,54,0.35)';
-        ctx.fillRect(x + 2, y + 2, ts - 4, ts - 4);
+        ctx.fillStyle = `rgba(${baseColor},${canPlace ? 0.4 : 0.3})`;
+        ctx.shadowColor = `rgba(${glowColor},${canPlace ? 0.3 : 0.15})`;
+        ctx.shadowBlur = 8;
+        const pad = 3;
+        ctx.beginPath();
+        ctx.roundRect(x + pad, y + pad, ts - pad * 2, ts - pad * 2, 6);
+        ctx.fill();
+        ctx.shadowBlur = 0;
         
-        // 塔图标预览 - 使用实际塔的SVG精灵替代emoji
-        ctx.globalAlpha = canPlace ? 0.5 : 0.25;
+        // 格子边框
+        ctx.strokeStyle = `rgba(${glowColor},${canPlace ? 0.6 : 0.4})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(x + pad, y + pad, ts - pad * 2, ts - pad * 2, 6);
+        ctx.stroke();
+        
+        // 塔图标预览
+        ctx.globalAlpha = canPlace ? 0.7 : 0.35;
         if (typeof SpriteManager !== 'undefined' && SpriteManager.get(def.id, 'towers')) {
-            SpriteManager.draw(ctx, def.id, 'towers', x + ts/2, y + ts/2, ts * 0.85);
+            SpriteManager.draw(ctx, def.id, 'towers', cx, cy, ts * 0.8);
         } else {
-            ctx.font = `${ts - 12}px serif`;
+            ctx.font = `${ts - 10}px serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(def.icon, x + ts/2, y + ts/2);
+            ctx.fillText(def.icon, cx, cy);
         }
         
-        ctx.globalAlpha = 1;
+        // 范围数值标签
+        ctx.globalAlpha = 0.8;
+        ctx.font = '11px "Microsoft YaHei", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillStyle = `rgba(${glowColor},0.8)`;
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(`范围:${def.range}`, cx, y - 4);
+        ctx.shadowBlur = 0;
+        
+        ctx.restore();
     }
     
     // ====== 核心操作方法 ======
