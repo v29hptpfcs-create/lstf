@@ -320,17 +320,12 @@ class GameMap {
         
         switch (type) {
             case 0: // 路径
-                // 泥土底色
                 ctx.fillStyle = '#6d4c41';
                 ctx.fillRect(x, y, ts, ts);
-                // 路面主体
-                const pathGrad = ctx.createLinearGradient(x, y, x, y + ts);
-                pathGrad.addColorStop(0, '#8d6e63');
-                pathGrad.addColorStop(0.5, '#795548');
-                pathGrad.addColorStop(1, '#6d4c41');
-                ctx.fillStyle = pathGrad;
+                ctx.fillStyle = cachedLinearGradient(ctx, x, y, x, y + ts, [
+                    [0, '#8d6e63'], [0.5, '#795548'], [1, '#6d4c41']
+                ]);
                 ctx.fillRect(x + 2, y + 2, ts - 4, ts - 4);
-                // 路面随机纹理
                 for (let i = 0; i < 4; i++) {
                     const px = x + 4 + ((seed * 37 + i * 13) % (ts - 8));
                     const py = y + 4 + ((seed * 53 + i * 19) % (ts - 8));
@@ -342,17 +337,12 @@ class GameMap {
                 break;
                 
             case 1: // 可建造健康草地
-                // 深绿底色
                 ctx.fillStyle = '#2e7d32';
                 ctx.fillRect(x, y, ts, ts);
-                // 草地主渐变
-                const grassGrad = ctx.createLinearGradient(x, y, x, y + ts);
-                grassGrad.addColorStop(0, '#4caf50');
-                grassGrad.addColorStop(0.5, '#43a047');
-                grassGrad.addColorStop(1, '#388e3c');
-                ctx.fillStyle = grassGrad;
+                ctx.fillStyle = cachedLinearGradient(ctx, x, y, x, y + ts, [
+                    [0, '#4caf50'], [0.5, '#43a047'], [1, '#388e3c']
+                ]);
                 ctx.fillRect(x + 1, y + 1, ts - 2, ts - 2);
-                // 草丛细节
                 this.drawGrassDetail(ctx, x, y, ts, seed);
                 break;
                 

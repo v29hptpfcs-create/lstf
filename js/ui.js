@@ -37,6 +37,11 @@ class UI {
         const g = this.game;
         if (!g) return;
         
+        // 节流：最多每 100ms 更新一次 UI，避免每帧操作 DOM
+        const now = Date.now();
+        if (this._lastUpdate && now - this._lastUpdate < 100) return;
+        this._lastUpdate = now;
+        
         this.elements.hpDisplay.textContent = g.hp;
         this.elements.chlorophyll.textContent = g.chlorophyll;
         this.elements.dewdrop.textContent = g.dewdrop;

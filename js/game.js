@@ -388,37 +388,9 @@ class Game {
         ctx.save();
         ctx.translate(shakeX, shakeY);
         
-        // 绘制地图
+        // 绘制地图（使用离屏缓存）
         if (this.map) {
             this.map.render(ctx, this.offsetX, this.offsetY);
-        }
-        
-        // 调试：绘制路径线+点
-        if (this.map && this.map.pathCoords && this.map.pathCoords.length > 1) {
-            // 路径连线
-            ctx.strokeStyle = 'rgba(255,200,0,0.25)';
-            ctx.lineWidth = 12;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.beginPath();
-            const pc = this.map.pathCoords;
-            ctx.moveTo(pc[0].x + this.offsetX, pc[0].y + this.offsetY);
-            for (let i = 1; i < pc.length; i++) {
-                ctx.lineTo(pc[i].x + this.offsetX, pc[i].y + this.offsetY);
-            }
-            ctx.stroke();
-            // 路径点
-            ctx.fillStyle = '#ffeb3b';
-            for (const p of pc) {
-                ctx.beginPath();
-                ctx.arc(p.x + this.offsetX, p.y + this.offsetY, 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            // 起点(绿)和终点(红)
-            ctx.fillStyle = '#4caf50';
-            ctx.beginPath(); ctx.arc(pc[0].x + this.offsetX, pc[0].y + this.offsetY, 6, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#f44336';
-            ctx.beginPath(); ctx.arc(pc[pc.length-1].x + this.offsetX, pc[pc.length-1].y + this.offsetY, 6, 0, Math.PI * 2); ctx.fill();
         }
         
         // 绘制地面效果

@@ -365,14 +365,128 @@ body {
 .tag-animal { background: rgba(206,147,216,0.3); color: #ce93d8; }
 .tag-industrial { background: rgba(255,138,101,0.3); color: #ff8a65; }
 
-/* ==================== 剧情故事 ==================== */
-.story-bg { position: fixed; inset: 0; background: radial-gradient(ellipse at center, rgba(0,20,0,0.95), rgba(0,10,0,0.98)); z-index: 199; }
-.story-container { position: fixed; inset: 0; z-index: 200; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px; }
-.story-title { color: #7cfc00; font-size: 1.3rem; margin-bottom: 24px; text-shadow: 0 0 20px rgba(124,252,0,0.4); letter-spacing: 4px; }
-.story-text { max-width: 580px; background: rgba(0,0,0,0.5); border: 1px solid rgba(76,175,80,0.15); border-radius: 12px; padding: 24px 32px; cursor: pointer; transition: all 0.3s; }
-.story-text:hover { border-color: rgba(124,252,0,0.3); box-shadow: 0 0 24px rgba(124,252,0,0.08); }
-.story-speaker { color: #76ff03; font-size: 0.95rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
-.story-line { color: #c8e6c9; font-size: 1.05rem; line-height: 1.6; min-height: 1.8em; }
+/* ==================== 剧情故事（优化版）==================== */
+.story-bg {
+    position: fixed; inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(0,60,0,0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0,30,0,0.20) 0%, transparent 50%),
+        radial-gradient(ellipse at center, rgba(0,15,0,0.95), rgba(0,5,0,0.98));
+    z-index: 199;
+    animation: storyBgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes storyBgPulse {
+    from { opacity: 0.85; }
+    to { opacity: 1; }
+}
+.story-container {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 30px 40px;
+    cursor: default;
+}
+
+/* 顶部控制栏 */
+.story-header {
+    position: absolute; top: 20px; left: 30px; right: 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 10;
+}
+.story-ctrl-btn {
+    padding: 6px 16px; border: 1px solid rgba(76,175,80,0.3);
+    border-radius: 8px; background: rgba(46,125,50,0.15);
+    color: #a5d6a7; cursor: pointer; font-size: 0.78rem;
+    transition: all 0.2s; letter-spacing: 1px;
+}
+.story-ctrl-btn:hover {
+    background: rgba(76,175,80,0.3); border-color: rgba(124,252,0,0.4);
+    color: #e8f5e8; transform: translateY(-1px);
+}
+.story-skip-btn { color: rgba(255,255,255,0.4); }
+.story-skip-btn:hover { color: #ef9a9a; border-color: rgba(244,67,54,0.4); }
+
+/* 进度指示 */
+.story-progress {
+    font-size: 0.85rem; color: rgba(165,214,167,0.6);
+    letter-spacing: 2px; font-weight: 300;
+}
+.story-progress .sp-dot {
+    display: inline-block;
+    animation: spPulse 1.5s ease-in-out infinite;
+    color: #7cfc00;
+}
+@keyframes spPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* 对话框 */
+.story-dialog {
+    max-width: 620px; width: 90%;
+    background: linear-gradient(145deg, rgba(8,25,8,0.90), rgba(4,12,4,0.93));
+    border: 1px solid rgba(76,175,80,0.12);
+    border-radius: 16px; padding: 28px 32px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 30px rgba(124,252,0,0.03);
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+.story-dialog:hover {
+    border-color: rgba(124,252,0,0.20);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 40px rgba(124,252,0,0.06);
+}
+
+/* 角色头部 */
+.story-char-header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px solid rgba(76,175,80,0.08);
+}
+.story-char-icon { font-size: 1.6rem; flex-shrink: 0; }
+.story-char-name {
+    font-size: 1rem; font-weight: bold;
+    letter-spacing: 2px;
+}
+.story-char-desc {
+    font-size: 0.72rem; color: rgba(165,214,167,0.4);
+    margin-left: auto; letter-spacing: 1px;
+}
+
+/* 对话文本 */
+.story-line {
+    color: #c8e6c9; font-size: 1.05rem; line-height: 1.8;
+    min-height: 2.2em; letter-spacing: 1px;
+    position: relative;
+}
+.story-line-done::after {
+    content: '▍';
+    display: inline-block;
+    color: #7cfc00;
+    animation: cursorBlink 0.8s step-end infinite;
+    margin-left: 2px;
+    font-weight: bold;
+}
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+@keyframes storyFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 底部点击提示 */
+.story-hint {
+    position: absolute; bottom: 20px;
+    font-size: 0.75rem; color: rgba(165,214,167,0.3);
+    animation: hintPulse 2s ease-in-out infinite;
+    letter-spacing: 2px;
+}
+@keyframes hintPulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.7; }
+}
 
 /* ==================== 生物图鉴弹出卡片 ==================== */
 .bestiary-popup {

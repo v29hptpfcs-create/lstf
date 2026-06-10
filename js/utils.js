@@ -9,7 +9,8 @@ function lerp(a, b, t) {
 }
 
 function distance(x1, y1, x2, y2) {
-    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+    const dx = x2 - x1, dy = y2 - y1;
+    return Math.sqrt(dx * dx + dy * dy);
 }
 
 function randomRange(min, max) {
@@ -104,4 +105,55 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
         this.closePath();
         return this;
     };
+}
+
+// ==================== 性能优化工具 ====================
+
+// Gradient 缓存（避免每帧创建大量 gradient 对象）
+const _gradCache = new Map();
+function getGradient(type, ctx, colors) {
+    // type: 'linear' | 'radial'
+    // colors: 参数数组 或 唯一key字符串
+    const key = typeof colors === 'string' ? colors : JSON.stringify(colors);
+    const cacheKey = `${type}_${key}`;
+    if (_gradCache.has(cacheKey)) return _gradCache.get(cacheKey);
+    return null; // 返回null表示需重新创建
+}
+function setGradient(type, ctx, colors, gradient) {
+    const key = typeof colors === 'string' ? colors : JSON.stringify(colors);
+    const cacheKey = `${type}_${key}`;
+    _gradCache.set(cacheKey, gradient);
+    // 控制缓存大小，超过1000时删除最早的一半
+    if (_gradCache.size > 1000) {
+        const keys = [..._gradCache.keys()].slice(0, 500);
+        for (const k of keys) _gradCache.delete(k);
+    }
+}
+function cachedLinearGradient(ctx, x0, y0, x1, y1, colorStops) {
+    const key = `linear_${x0},${y0},${x1},${y1}_${colorStops.map(s => `${s[0]}:${s[1]}`).join('|')}`;
+    let g = _gradCache.get(key);
+    if (!g) {
+        g = ctx.createLinearGradient(x0, y0, x1, y1);
+        for (const [pos, color] of colorStops) g.addColorStop(pos, color);
+        _gradCache.set(key, g);
+        if (_gradCache.size > 1000) {
+            const keys = [..._gradCache.keys()].slice(0, 500);
+            for (const k of keys) _gradCache.delete(k);
+        }
+    }
+    return g;
+}
+function cachedRadialGradient(ctx, x0, y0, r0, x1, y1, r1, colorStops) {
+    const key = `radial_${x0|0},${y0|0},${r0|0},${x1|0},${y1|0},${r1|0}_${colorStops.map(s => `${s[0]}:${s[1]}`).join('|')}`;
+    let g = _gradCache.get(key);
+    if (!g) {
+        g = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        for (const [pos, color] of colorStops) g.addColorStop(pos, color);
+        _gradCache.set(key, g);
+        if (_gradCache.size > 1000) {
+            const keys = [..._gradCache.keys()].slice(0, 500);
+            for (const k of keys) _gradCache.delete(k);
+        }
+    }
+    return g;
 }

@@ -1,5 +1,12 @@
-// ==================== 剧情系统 ====================
+// ==================== 剧情系统（优化版）====================
 const STORY = {
+    // 角色配置
+    characters: {
+        '生命之树': { icon: '🌳', color: '#7cfc00', desc: '大地意志' },
+        '系统':      { icon: '💻', color: '#4fc3f7', desc: '生态监控' },
+        '???':       { icon: '❓', color: '#ffd54f', desc: '神秘声音' },
+    },
+
     // ====== 每个关卡的开场剧情 ======
     levelIntros: [
         // 关卡0（第一章）：已在序章中覆盖，这里为空
@@ -50,7 +57,7 @@ const STORY = {
         // 关卡6（第七章）开场
         [
             { speaker: '系统', text: '六章净化完成。但深渊之底还有更可怕的污染源...', delay: 500 },
-            { speaker: '生命之树', text: '那是人类百年来倾倒的所有废料的汇集地。海底深渊中的毒泥正慢慢上涌。', delay: 3000 },
+            { speaker: '生命之树', text: '那是人类百年倾倒的所有废料的汇集地。海底深渊中的毒泥正慢慢上涌。', delay: 3000 },
             { speaker: '生命之树', text: '如果那里爆发，前六章的努力将前功尽弃。', delay: 2500 },
             { speaker: '系统', text: '警告：深渊之底污染密度是地表10倍。必须阻止它上浮！', delay: 2500 },
         ],
@@ -104,10 +111,17 @@ const STORY = {
     _currentIndex: 0,
     _timer: null,
     _onEnd: null,
+    _totalLines: 0,
+    
+    // 获取角色配置
+    _charConf(name) {
+        return this.characters[name] || { icon: '💬', color: '#c8e6c9', desc: '' };
+    },
     
     // 播放一段故事
     play(storyData, containerId, onEnd) {
         this._currentIndex = 0;
+        this._totalLines = storyData.length;
         this._onEnd = onEnd;
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -115,13 +129,13 @@ const STORY = {
         container.innerHTML = '';
         container.classList.remove('hidden');
         
+        // 顶部栏：语音 + 跳过按钮
         const headerEl = document.createElement('div');
-        headerEl.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;';
+        headerEl.className = 'story-header';
         
         const voiceBtn = document.createElement('button');
-        voiceBtn.className = 'ctrl-btn';
+        voiceBtn.className = 'story-ctrl-btn';
         voiceBtn.textContent = typeof VOICE !== 'undefined' && VOICE._enabled ? '🔊 语音' : '🔇 静音';
-        voiceBtn.style.cssText = 'padding:6px 14px;';
         voiceBtn.addEventListener('click', () => {
             if (typeof VOICE !== 'undefined') {
                 const on = VOICE.toggle();
@@ -131,9 +145,14 @@ const STORY = {
         });
         headerEl.appendChild(voiceBtn);
         
+        // 进度提示
+        const progressEl = document.createElement('div');
+        progressEl.className = 'story-progress';
+        headerEl.appendChild(progressEl);
+        
         const skipBtn = document.createElement('button');
-        skipBtn.className = 'ctrl-btn';
-        skipBtn.textContent = '跳过 ▶';
+        skipBtn.className = 'story-ctrl-btn story-skip-btn';
+        skipBtn.textContent = '跳过 ▸';
         skipBtn.addEventListener('click', () => {
             if (typeof VOICE !== 'undefined') VOICE.stop();
             if (this._timer) clearTimeout(this._timer);
@@ -144,14 +163,21 @@ const STORY = {
         
         container.appendChild(headerEl);
         
-        const textEl = document.createElement('div');
-        textEl.className = 'story-text';
-        container.appendChild(textEl);
+        // 对话框容器
+        const dialogBox = document.createElement('div');
+        dialogBox.className = 'story-dialog';
+        container.appendChild(dialogBox);
         
-        this._showNext(storyData, textEl, container);
+        // 底部点击提示
+        const hintEl = document.createElement('div');
+        hintEl.className = 'story-hint';
+        hintEl.textContent = '点击继续 ▶';
+        container.appendChild(hintEl);
+        
+        this._showNext(storyData, dialogBox, progressEl, container);
     },
     
-    _showNext(storyData, textEl, container) {
+    _showNext(storyData, dialogBox, progressEl, container) {
         if (this._currentIndex >= storyData.length) {
             container.classList.add('hidden');
             if (this._onEnd) this._onEnd();
@@ -159,56 +185,80 @@ const STORY = {
         }
         
         const line = storyData[this._currentIndex];
+        const total = this._totalLines;
+        const current = this._currentIndex + 1;
+        
+        // 更新进度
+        progressEl.innerHTML = `<span class="sp-dot">●</span> ${current}/${total}`;
+        
         let charIdx = 0;
         
         if (typeof VOICE !== 'undefined') {
             VOICE.speak(line.speaker, line.text);
         }
         
-        textEl.innerHTML = '';
-        const speakerSpan = document.createElement('div');
-        speakerSpan.className = 'story-speaker';
-        speakerSpan.textContent = '◆ ' + line.speaker;
-        textEl.appendChild(speakerSpan);
+        // 角色配置
+        const ch = this._charConf(line.speaker);
         
+        // 构建对话卡片
+        dialogBox.innerHTML = '';
+        dialogBox.style.animation = 'none';
+        void dialogBox.offsetHeight;
+        dialogBox.style.animation = 'storyFadeIn 0.45s ease';
+        
+        // 角色头部
+        const charHeader = document.createElement('div');
+        charHeader.className = 'story-char-header';
+        charHeader.innerHTML = `
+            <span class="story-char-icon" style="color:${ch.color}">${ch.icon}</span>
+            <span class="story-char-name" style="color:${ch.color}">${line.speaker}</span>
+            <span class="story-char-desc">${ch.desc}</span>
+        `;
+        dialogBox.appendChild(charHeader);
+        
+        // 说话内容
         const textSpan = document.createElement('div');
         textSpan.className = 'story-line';
-        textEl.appendChild(textSpan);
+        dialogBox.appendChild(textSpan);
         
+        // 打字机效果
         const typeChar = () => {
             if (charIdx < line.text.length) {
                 textSpan.textContent += line.text[charIdx];
                 charIdx++;
-                this._timer = setTimeout(typeChar, 30);
+                this._timer = setTimeout(typeChar, 28);
             } else {
+                // 打字完成，添加闪烁光标
+                textSpan.classList.add('story-line-done');
                 this._timer = setTimeout(() => {
                     this._currentIndex++;
-                    this._showNext(storyData, textEl, container);
+                    this._showNext(storyData, dialogBox, progressEl, container);
                 }, line.delay || 1500);
             }
         };
         
-        textEl.style.animation = 'fadeInUp 0.4s ease';
         typeChar();
         
+        // 点击推进
         const clickNext = () => {
             if (typeof VOICE !== 'undefined') VOICE.stop();
             if (this._timer) clearTimeout(this._timer);
             if (charIdx < line.text.length) {
                 textSpan.textContent = line.text;
                 charIdx = line.text.length;
+                textSpan.classList.add('story-line-done');
                 this._timer = setTimeout(() => {
                     this._currentIndex++;
-                    this._showNext(storyData, textEl, container);
-                }, (line.delay || 1500) * 0.6);
+                    this._showNext(storyData, dialogBox, progressEl, container);
+                }, (line.delay || 1500) * 0.5);
             } else {
                 this._currentIndex++;
-                this._showNext(storyData, textEl, container);
+                this._showNext(storyData, dialogBox, progressEl, container);
             }
         };
-        const oldClick = textEl._clickHandler;
-        if (oldClick) textEl.removeEventListener('click', oldClick);
-        textEl.addEventListener('click', clickNext);
-        textEl._clickHandler = clickNext;
+        const oldClick = dialogBox._clickHandler;
+        if (oldClick) dialogBox.removeEventListener('click', oldClick);
+        dialogBox.addEventListener('click', clickNext);
+        dialogBox._clickHandler = clickNext;
     }
 };
